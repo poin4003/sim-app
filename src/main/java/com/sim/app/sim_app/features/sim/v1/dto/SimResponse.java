@@ -1,12 +1,13 @@
 package com.sim.app.sim_app.features.sim.v1.dto;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import lombok.Data;
 
 @Data
 public class SimResponse {
-    private String simId;
+    private UUID simId;
 
     private String simPhoneNumber;
     private Integer simStatus;

@@ -1,25 +1,20 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-DROP TABLE IF EXISTS sim CASCADE;
-DROP TABLE IF EXISTS users CASCADE;
-DROP TABLE IF EXISTS roles CASCADE;
 DROP TABLE IF EXISTS permissions CASCADE;
-DROP TABLE IF EXISTS user_roles CASCADE;
-DROP TABLE IF EXISTS role_permissions CASCADE;
-DROP TABLE IF EXISTS persistent_logins CASCADE;
-
 CREATE TABLE permissions (
     permission_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     permission_name VARCHAR(100) NOT NULL,
     permission_key VARCHAR(100) UNIQUE NOT NULL 
 );
 
+DROP TABLE IF EXISTS roles CASCADE;
 CREATE TABLE roles (
     role_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     role_name VARCHAR(30) NOT NULL,
     role_key VARCHAR(100) UNIQUE NOT NULL
 );
 
+DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE users (
     user_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     login_name VARCHAR(30) UNIQUE NOT NULL,
@@ -28,7 +23,26 @@ CREATE TABLE users (
     del_flag CHAR(1) DEFAULT '0'
 );
 
-CREATE TABLE sim (
+DROP TABLE IF EXISTS role_permissions CASCADE;
+CREATE TABLE role_permissions (
+    role_id UUID NOT NULL,
+    permission_id UUID NOT NULL,
+    PRIMARY KEY (role_id, permission_id),
+    FOREIGN KEY (role_id) REFERENCES roles (role_id) ON DELETE CASCADE,
+    FOREIGN KEY (permission_id) REFERENCES permissions (permission_id) ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS user_roles CASCADE;
+CREATE TABLE user_roles (
+    user_id UUID NOT NULL,
+    role_id UUID NOT NULL,
+    PRIMARY KEY (user_id, role_id),
+    FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE,
+    FOREIGN KEY (role_id) REFERENCES roles (role_id) ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS sims CASCADE;
+CREATE TABLE sims (
     sim_id UUID PRIMARY KEY DEFAULT gen_random_uuid(), 
     sim_phone_number VARCHAR(20) NOT NULL UNIQUE,
     sim_status INT NOT NULL,
@@ -39,29 +53,6 @@ CREATE TABLE sim (
     description TEXT,
     created_at TIMESTAMP WITHOUT TIME ZONE,
     updated_at TIMESTAMP WITHOUT TIME ZONE
-);
-
-CREATE TABLE role_permissions (
-    role_id UUID NOT NULL,
-    permission_id UUID NOT NULL,
-    PRIMARY KEY (role_id, permission_id),
-    FOREIGN KEY (role_id) REFERENCES roles (role_id) ON DELETE CASCADE,
-    FOREIGN KEY (permission_id) REFERENCES permissions (permission_id) ON DELETE CASCADE
-);
-
-CREATE TABLE user_roles (
-    user_id UUID NOT NULL,
-    role_id UUID NOT NULL,
-    PRIMARY KEY (user_id, role_id),
-    FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE,
-    FOREIGN KEY (role_id) REFERENCES roles (role_id) ON DELETE CASCADE
-);
-
-CREATE TABLE persistent_logins (
-    username VARCHAR(64) NOT NULL,
-    series VARCHAR(64) PRIMARY KEY,
-    token VARCHAR(64) NOT NULL,
-    last_used TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );
 
 DO $$

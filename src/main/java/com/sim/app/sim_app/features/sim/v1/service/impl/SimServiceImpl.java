@@ -1,6 +1,7 @@
 package com.sim.app.sim_app.features.sim.v1.service.impl;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -38,13 +39,14 @@ public class SimServiceImpl implements SimService{
         }
 
         SimEntity simEntity = simMapStruct.toEntity(request);
+        simEntity.setSimId(UUID.randomUUID());
 
         simMapper.insert(simEntity);
 
         return simMapStruct.toResponseDto(simEntity);
     }
 
-    public SimResponse getSimById(String id) {
+    public SimResponse getSimById(UUID id) {
         SimEntity simEntity = simMapper.selectById(id);
 
         if (simEntity == null) { 

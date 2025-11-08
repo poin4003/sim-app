@@ -19,6 +19,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.UUID;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,7 +56,7 @@ public class SimController extends BaseController {
     @Operation(summary = "Get SIM by ID", description = "Get SIM by ID")
     @RateLimiter(name = "default")
     @CircuitBreaker(name = "checkRandom")
-    public ResponseEntity<ResultMessage<SimResponse>> getSimById(@PathVariable String id) {
+    public ResponseEntity<ResultMessage<SimResponse>> getSimById(@PathVariable UUID id) {
         log.info("Controller:-> getSimById | {}", id);
         SimResponse response = simService.getSimById(id);
         return OK("Get sim success", response);

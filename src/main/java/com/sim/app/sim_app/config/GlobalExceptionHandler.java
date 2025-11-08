@@ -7,6 +7,7 @@ import com.sim.app.sim_app.core.vo.ResultMessage;
 
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.ratelimiter.RequestNotPermitted;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +18,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MyException.class)
-    public ResponseEntity<ResultMessage<?>> handleCustomException(MyException ex) { 
+    public ResponseEntity<ResultMessage<?>> handleCustomException(MyException ex) {
+        log.error("MyException: {}, code: {}", ex.getMyMessage(), ex.getResultCode(), ex);
+
         HttpStatus httpStatus = ex.getResultCode().getHttpStatus();
         
         String finalMessage = (ex.getMyMessage() != null && !ex.getMyMessage().trim().isEmpty()) 
@@ -35,6 +39,7 @@ public class GlobalExceptionHandler {
     
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ResultMessage<?>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        log.warn("Validation error: {}", ex.getMessage(), ex);
         String errors = ex.getBindingResult().getFieldErrors().stream()
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .collect(Collectors.joining("; "));
@@ -49,6 +54,7 @@ public class GlobalExceptionHandler {
     
     @ExceptionHandler(RequestNotPermitted.class)
     public ResponseEntity<ResultMessage<?>> handleRateLimitException(RequestNotPermitted ex) {
+        log.warn("Validation error: {}", ex.getMessage(), ex);
         ResultMessage<?> errorMessage = ResultUtil.error(
             ResultCode.RATE_LIMIT_ERROR
         );
@@ -58,6 +64,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CallNotPermittedException.class)
     public ResponseEntity<ResultMessage<?>> handleCircuitBreakerOpen(CallNotPermittedException ex) {
+        log.warn("Validation error: {}", ex.getMessage(), ex);
         ResultMessage<?> errorMessage = ResultUtil.error(
             ResultCode.CIRCUIT_BREAKER_IS_OPEN
         );

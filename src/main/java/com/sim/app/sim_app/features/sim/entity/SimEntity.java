@@ -1,5 +1,7 @@
 package com.sim.app.sim_app.features.sim.entity;
 
+import java.util.UUID;
+
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -11,10 +13,10 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("sim")
+@TableName("sims")
 public class SimEntity extends BaseEntity {
     @TableId(value = "sim_id", type = IdType.ASSIGN_UUID)
-    private String simId;
+    private UUID simId;
 
     @TableField("sim_phone_number")
     private String simPhoneNumber;
