@@ -9,7 +9,7 @@ import com.sim.app.sim_app.core.dto.PaginationResponse;
 import com.sim.app.sim_app.core.vo.ResultMessage;
 import com.sim.app.sim_app.features.sim.v1.dto.CreateSimRequest;
 import com.sim.app.sim_app.features.sim.v1.dto.SimResponse;
-import com.sim.app.sim_app.features.sim.v1.serivce.SimService;
+import com.sim.app.sim_app.features.sim.v1.service.SimService;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;

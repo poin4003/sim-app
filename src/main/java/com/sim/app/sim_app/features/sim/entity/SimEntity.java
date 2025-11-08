@@ -6,19 +6,11 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.sim.app.sim_app.entity.BaseEntity;
 
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Table(
-    name = "sim",
-    indexes = {
-        @Index(name = "uq_sim_phone_number", columnList = "sim_phone_number", unique = true)
-    }
-)
 @TableName("sim")
 public class SimEntity extends BaseEntity {
     @TableId(value = "sim_id", type = IdType.ASSIGN_UUID)
