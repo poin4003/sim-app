@@ -6,7 +6,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.sim.app.sim_app.entity.BaseEntity;
+import com.sim.app.sim_app.base.BaseEntity;
+import com.sim.app.sim_app.features.sim.enums.SimStatusEnum;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,7 +23,7 @@ public class SimEntity extends BaseEntity {
     private String simPhoneNumber;
 
     @TableField("sim_status")
-    private Integer simStatus;
+    private SimStatusEnum simStatus;
 
     @TableField("sim_selling_price")
     private Integer simSellingPrice;

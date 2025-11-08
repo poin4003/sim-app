@@ -26,14 +26,20 @@ public class MyConfigSecurity {
     @Bean 
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(authorizeRequest -> authorizeRequest
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
+            // .authorizeHttpRequests(authorizeRequest -> authorizeRequest
+            //     .requestMatchers("/admin/**").hasRole("ADMIN")
+            //     .anyRequest().authenticated()
+            // )
+            .authorizeHttpRequests(authorize -> authorize
+                .anyRequest().permitAll()
             ) 
-            .formLogin(form -> form
-                .defaultSuccessUrl("/user/info", true)
-            ) 
-            .userDetailsService(userDetailService);
+            // .formLogin(form -> form
+            //     .defaultSuccessUrl("/user/info", true)
+            // ) 
+            // .userDetailsService(userDetailService);
+            .formLogin(form -> form.disable())
+            .httpBasic(basic -> basic.disable())
+            .csrf(csrf -> csrf.disable());
 
         return http.build();
     }
