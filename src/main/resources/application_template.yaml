@@ -21,6 +21,9 @@ spring:
         hikari:
             maximum-pool-size: 20
             minimum-idle: 5 
+    
+    flyway:
+        enabled: false
 
 # Swagger
 springdoc:
@@ -41,9 +44,13 @@ mybatis-plus:
 # Logger
 logging:
     level:
-        root: INFO
-    file:
-        name: ./logs/application.log
+        "[com.sim.app.sim_app]": DEBUG 
+        "[com.baomidou.mybatisplus]": DEBUG  
+        "[org.apache.ibatis]": DEBUG 
+        "[org.apache.ibatis.type]": DEBUG 
+        "[org.springframework.jdbc.core]": DEBUG
+        "[java.sql.Connection]": TRACE
+        "[java.sql]": TRACE
 
 # Rate limitter
 resilience4j:

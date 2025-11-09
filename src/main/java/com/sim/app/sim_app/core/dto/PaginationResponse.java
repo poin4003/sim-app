@@ -7,17 +7,20 @@ import lombok.Data;
 @Data
 public class PaginationResponse<T> {
     private List<T> items;
-    private Long totalItems;
-    private Long currentPages;
-    private Long pageSize;
+    private PaginationMeta metaData;
 
-    public static <T> PaginationResponse<T> of(List<T> items, long totalItems, long currentPages, long pageSize) {
+    public static <T> PaginationResponse<T> of(List<T> items, long totalItems, long currentPage, long pageSize) {
         PaginationResponse<T> response = new PaginationResponse<>();
-        response.setItems(items);
-        response.setTotalItems(totalItems);
-        response.setCurrentPages(currentPages);
-        response.setPageSize(pageSize);
 
+        PaginationMeta meta = new PaginationMeta(
+            totalItems,
+            currentPage,
+            pageSize,
+            (long) Math.ceil((double) totalItems / pageSize)
+        );
+
+        response.setItems(items);
+        response.setMetaData(meta);
         return response;
     }
 }

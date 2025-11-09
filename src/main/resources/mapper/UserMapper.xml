@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sim.app.sim_app.features.user.mapper.UserMapper">
+
+    <select id="selectRolesByUserId" resultMap="RoleWithPermissionsMap">
+        SELECT r.role_id, r.role_name, r.role_key
+        FROM roles r
+        JOIN user_roles ur ON r.role_id = ur.role_id
+        WHERE ur.user_id = #{userId}
+    </select>
+
+    <resultMap id="RoleWithPermissionsMap" type="com.sim.app.sim_app.features.user.entity.Role">
+        <id property="roleId" column="role_id"/>
+        <result property="roleName" column="role_name"/>
+        <result property="roleKey" column="role_key"/>
+        <collection property="permissions" ofType="com.sim.app.sim_app.features.user.entity.Permission"
+                    select="selectPermissionByRoleId" column="role_id"/>
+    </resultMap>
+
+    <select id="selectPermissionByRoleId" resultType="com.sim.app.sim_app.features.user.entity.Permission">
+        SELECT p.permission_id, p.permission_name, p.permission_key
+        FROM permissions p
+        JOIN role_permissions rp ON p.permission_id = rp.permission_id
+        WHERE rp.role_id = #{roleId}
+    </select>
+
+    <select id="selectPermissionByUserId" resultType="com.sim.app.sim_app.features.user.entity.Permission">
+        SELECT DISTINCT p.permission_id, p.permission_name, p.permission_key
+        FROM permissions p
+        JOIN role_permissions rp ON p.permission_id = rp.permission_id
+        JOIN user_roles ur ON rp.role_id = ur.role_id
+        WHERE ur.user_id = #{userId}
+    </select>
+
+</mapper>

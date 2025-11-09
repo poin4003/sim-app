@@ -1,4 +1,4 @@
-package com.sim.app.sim_app.entity;
+package com.sim.app.sim_app.base;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 

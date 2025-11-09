@@ -9,7 +9,7 @@ import com.sim.app.sim_app.core.dto.PaginationResponse;
 import com.sim.app.sim_app.core.vo.ResultMessage;
 import com.sim.app.sim_app.features.sim.v1.dto.CreateSimRequest;
 import com.sim.app.sim_app.features.sim.v1.dto.SimResponse;
-import com.sim.app.sim_app.features.sim.v1.serivce.SimService;
+import com.sim.app.sim_app.features.sim.v1.service.SimService;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
@@ -18,6 +18,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,7 +56,7 @@ public class SimController extends BaseController {
     @Operation(summary = "Get SIM by ID", description = "Get SIM by ID")
     @RateLimiter(name = "default")
     @CircuitBreaker(name = "checkRandom")
-    public ResponseEntity<ResultMessage<SimResponse>> getSimById(@PathVariable String id) {
+    public ResponseEntity<ResultMessage<SimResponse>> getSimById(@PathVariable UUID id) {
         log.info("Controller:-> getSimById | {}", id);
         SimResponse response = simService.getSimById(id);
         return OK("Get sim success", response);
