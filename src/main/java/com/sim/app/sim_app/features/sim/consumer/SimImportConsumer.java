@@ -20,7 +20,7 @@ public class SimImportConsumer {
     @KafkaListener(
         topics = "import-sim-topic", 
         groupId = "sim-group",
-        containerFactory = "kafkaListenerContainerFactory"
+        containerFactory = "simKafkaListenerContainerFactory"
     )
     public void ImportSingleSim(CreateSimRequest request) {
         log.info("Received created Sim: {}", request);

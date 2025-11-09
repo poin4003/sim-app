@@ -1,7 +1,8 @@
-package com.sim.app.sim_app.core.kafka;
+package com.sim.app.sim_app.features.sim.config;
 
+import com.sim.app.sim_app.features.sim.v1.dto.CreateSimRequest;
 import java.util.Map;
-
+import lombok.RequiredArgsConstructor;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
@@ -12,27 +13,21 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
-import org.springframework.util.backoff.FixedBackOff;
-
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.sim.app.sim_app.features.sim.v1.dto.CreateSimRequest;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Configuration
-@Slf4j
 @EnableKafka
 @RequiredArgsConstructor
-public class KafkaConsumerConfig {
+public class SimKafkaConfig {
+    
     private final KafkaProperties kafkaProperties;
+    private final DefaultErrorHandler commonErrorHandler;
 
     @Bean
-    public ConsumerFactory<String, CreateSimRequest> consumerFactory() { 
+    public ConsumerFactory<String, CreateSimRequest> simConsumerFactory() { 
         Map<String, Object> configs = kafkaProperties.buildConsumerProperties(); 
 
         if (configs == null) {
-            throw new NullPointerException("ConsumerFactory configs must not be null");
+            throw new NullPointerException("Kafka Consumer Properties Map cannot be null.");
         }
 
         return new DefaultKafkaConsumerFactory<>(
@@ -44,28 +39,18 @@ public class KafkaConsumerConfig {
 
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, CreateSimRequest>
-        kafkaListenerContainerFactory(ConsumerFactory<String, CreateSimRequest> consumerFactory) {
-
-        FixedBackOff fixedBackOff = new FixedBackOff(0L, 3); 
-
-        DefaultErrorHandler errorHandler = new DefaultErrorHandler((consumerRecord, exception) -> {
-            log.error("Failed to process record after 3 retries. Skipping record. Topic: {}, Offset: {}, Error: {}", 
-                    consumerRecord.topic(), consumerRecord.offset(), exception.getMessage());
-        }, fixedBackOff); 
-
-        errorHandler.addNotRetryableExceptions(
-            InvalidFormatException.class
-        );
-
+        simKafkaListenerContainerFactory(ConsumerFactory<String, CreateSimRequest> simConsumerFactory) {
+        
         ConcurrentKafkaListenerContainerFactory<String, CreateSimRequest> factory =
             new ConcurrentKafkaListenerContainerFactory<>();
-        
-        if (consumerFactory == null) {
-            throw new NullPointerException("ConsumerFactory must not be null");
-        }
 
-        factory.setConsumerFactory(consumerFactory);
-        factory.setCommonErrorHandler(errorHandler);
+        if (simConsumerFactory == null) {
+            throw new NullPointerException("simConsumerFactory must be injected by Spring.");
+        }
+    
+        factory.setConsumerFactory(simConsumerFactory);
+        
+        factory.setCommonErrorHandler(commonErrorHandler);
 
         return factory;
     }
