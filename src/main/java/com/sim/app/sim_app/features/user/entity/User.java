@@ -25,8 +25,8 @@ public class User implements UserDetails {
     @TableId(value = "user_id", type = IdType.ASSIGN_UUID)
     private UUID userId;
 
-    @TableField(value = "login_name")
-    private String loginName;
+    @TableField(value = "email")
+    private String email;
 
     @TableField(value = "password")
     private String password;
@@ -63,7 +63,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.loginName;
+        return this.email;
     }
 
     @Override

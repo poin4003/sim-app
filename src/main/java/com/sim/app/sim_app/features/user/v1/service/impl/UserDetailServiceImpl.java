@@ -23,7 +23,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // 1. Get user info
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(User::getLoginName, username);
+        queryWrapper.eq(User::getEmail, username);
         User user = userMapper.selectOne(queryWrapper);
         if (user == null) {
             throw new UsernameNotFoundException("Not found" + username);

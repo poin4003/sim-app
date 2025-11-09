@@ -1,9 +1,11 @@
-package com.sim.app.sim_app.config;
+package com.sim.app.sim_app.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.sim.app.sim_app.config.jwt.JwtAuthenticationFilter;
 import com.sim.app.sim_app.features.user.v1.service.impl.UserDetailServiceImpl;
 
 import lombok.RequiredArgsConstructor;
@@ -24,26 +27,24 @@ public class MyConfigSecurity {
     private final UserDetailServiceImpl userDetailService;
 
     @Bean 
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthFilter) throws Exception {
         http
-            // .authorizeHttpRequests(authorizeRequest -> authorizeRequest
-            //     .requestMatchers("/admin/**").hasRole("ADMIN")
-            //     .anyRequest().authenticated()
-            // )
-            .authorizeHttpRequests(authorize -> authorize
-                .anyRequest().permitAll()
-            ) 
-            // .formLogin(form -> form
-            //     .defaultSuccessUrl("/user/info", true)
-            // ) 
-            // .userDetailsService(userDetailService);
+            .csrf(csrf -> csrf.disable())
+            .cors(Customizer.withDefaults())
             .formLogin(form -> form.disable())
             .httpBasic(basic -> basic.disable())
-            .csrf(csrf -> csrf.disable());
+            .authorizeHttpRequests(authorize -> authorize
+            .requestMatchers(
+                "/swagger-ui/**", 
+                "/v3/api-docs/**",
+                "/api/v1/auth/**"
+            ).permitAll()
+            .anyRequest().authenticated())
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-
+ 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

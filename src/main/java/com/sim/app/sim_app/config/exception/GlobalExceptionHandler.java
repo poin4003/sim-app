@@ -1,4 +1,4 @@
-package com.sim.app.sim_app.config;
+package com.sim.app.sim_app.config.exception;
 
 import com.sim.app.sim_app.core.exception.MyException;
 import com.sim.app.sim_app.core.response.ResultCode;

@@ -17,7 +17,7 @@ CREATE TABLE roles (
 DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE users (
     user_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    login_name VARCHAR(30) UNIQUE NOT NULL,
+    email VARCHAR(30) UNIQUE NOT NULL,
     password VARCHAR(64) DEFAULT NULL,
     status CHAR(1) DEFAULT '0',
     del_flag CHAR(1) DEFAULT '0'
@@ -85,11 +85,11 @@ BEGIN
         ('Xem báo cáo', 'admin:report:view'),
         ('Kiểm duyệt sản phẩm', 'admin:product:moderate');
 
-    INSERT INTO users (user_id, login_name, password, status, del_flag) VALUES 
-        (ADMIN_UID, 'app_admin', '$2b$10$aFCsDS3JNrk3lR/mopRPROvACMVX4rj8v0QTpalcFbuUc9YuYqwFu', '0', '0'),
-        (SELLER_UID, 'shopthoitrang', '$2b$10$aFCsDS3JNrk3lR/mopRPROvACMVX4rj8v0QTpalcFbuUc9YuYqwFu', '0', '0'),
-        (BUYER_UID, 'nguyenvana', '$2b$10$aFCsDS3JNrk3lR/mopRPROvACMVX4rj8v0QTpalcFbuUc9YuYqwFu', '0', '0'),
-        (SELLER_BUYER_UID, 'combo_user', '$2b$10$aFCsDS3JNrk3lR/mopRPROvACMVX4rj8v0QTpalcFbuUc9YuYqwFu', '0', '0');
+    INSERT INTO users (user_id, email, password, status, del_flag) VALUES 
+        (ADMIN_UID, 'admin@gmail.com', '$2b$10$aFCsDS3JNrk3lR/mopRPROvACMVX4rj8v0QTpalcFbuUc9YuYqwFu', '0', '0'),
+        (SELLER_UID, 'shop1@gmail.com', '$2b$10$aFCsDS3JNrk3lR/mopRPROvACMVX4rj8v0QTpalcFbuUc9YuYqwFu', '0', '0'),
+        (BUYER_UID, 'nguyenvana@gmail.com', '$2b$10$aFCsDS3JNrk3lR/mopRPROvACMVX4rj8v0QTpalcFbuUc9YuYqwFu', '0', '0'),
+        (SELLER_BUYER_UID, 'combo@gmail.com', '$2b$10$aFCsDS3JNrk3lR/mopRPROvACMVX4rj8v0QTpalcFbuUc9YuYqwFu', '0', '0');
 
     INSERT INTO user_roles (user_id, role_id) VALUES 
         (ADMIN_UID, ADMIN_RID),

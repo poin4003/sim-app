@@ -1,4 +1,4 @@
-package com.sim.app.sim_app.config;
+package com.sim.app.sim_app.config.db;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
