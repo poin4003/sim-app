@@ -27,3 +27,5 @@ flyway_validate:
 flyway_repair:
 	@echo "Repairing schema history..."
 	./mvnw.cmd flyway:repair "-Dflyway.url=$(DB_URL)" "-Dflyway.user=$(DB_USER)" "-Dflyway.password=$(DB_PASSWORD)"
+
+# docker compose -f docker-compose-broker-kafka.yaml --project-name kafka  up -d
