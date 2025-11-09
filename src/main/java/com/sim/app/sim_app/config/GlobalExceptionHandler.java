@@ -44,14 +44,11 @@ public class GlobalExceptionHandler {
     
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ResultMessage<?>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        log.warn("Validation error: {}", ex.getMessage());
+        log.warn("Validation error caught: {}", ex.getMessage(), ex);
 
         String errors = ex.getBindingResult().getFieldErrors().stream()
-                .map(error -> {
-                    String field = error.getField();
-                    String message = error.getDefaultMessage() != null ? error.getDefaultMessage() : "Invalid value";
-                    return field + ": " + message;
-                })
+                .map(error -> error.getField() + ": " + 
+                    (error.getDefaultMessage() != null ? error.getDefaultMessage() : "Invalid value"))
                 .collect(Collectors.joining("; "));
 
         ResultMessage<?> errorMessage = ResultUtil.error(
@@ -64,7 +61,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ResultMessage<?>> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
-        log.warn("Invalid request body: {}", ex.getMessage());
+        log.warn("Invalid request body: {}", ex.getMessage(), ex);
 
         String rawMessage = ex.getMostSpecificCause() != null
                 ? ex.getMostSpecificCause().getMessage()
@@ -79,10 +76,10 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
     }
-    
+
     @ExceptionHandler(MissingServletRequestPartException.class)
     public ResponseEntity<ResultMessage<?>> handleMissingServletRequestPart(MissingServletRequestPartException ex) {
-        log.warn("Missing form-data part: {}", ex.getMessage());
+        log.warn("Missing form-data part: {}", ex.getMessage(), ex);
         ResultMessage<?> errorMessage = ResultUtil.error(
                 ResultCode.PARAMS_ERROR,
                 "Missing form-data field: " + ex.getRequestPartName()
@@ -92,7 +89,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<ResultMessage<?>> handleMissingRequestParam(MissingServletRequestParameterException ex) {
-        log.warn("Missing request parameter: {}", ex.getMessage());
+        log.warn("Missing request parameter: {}", ex.getMessage(), ex);
         ResultMessage<?> errorMessage = ResultUtil.error(
                 ResultCode.PARAMS_ERROR,
                 "Missing required parameter: " + ex.getParameterName()
@@ -102,7 +99,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MissingPathVariableException.class)
     public ResponseEntity<ResultMessage<?>> handleMissingPathVariable(MissingPathVariableException ex) {
-        log.warn("Missing path variable: {}", ex.getMessage());
+        log.warn("Missing path variable: {}", ex.getMessage(), ex);
         ResultMessage<?> errorMessage = ResultUtil.error(
                 ResultCode.PARAMS_ERROR,
                 "Missing path variable: " + ex.getVariableName()
