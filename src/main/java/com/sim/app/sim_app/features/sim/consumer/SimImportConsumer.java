@@ -25,11 +25,17 @@ public class SimImportConsumer {
     public void ImportSingleSim(CreateSimRequest request) {
         log.info("Received created Sim: {}", request);
 
+        if (request == null) {
+            log.error("Received null request due to deserialization error. Skipping");
+            return;
+        }
+
         try {
             SimResponse response = simService.createSim(request);
             log.info("Successfully created SIM: {}", response.getSimPhoneNumber());
         } catch (Exception e) {
             log.error("Error processing SIM import for phone number {}: {}", request.getSimPhoneNumber(), e.getMessage());
+            throw e;
         }
     }
 }

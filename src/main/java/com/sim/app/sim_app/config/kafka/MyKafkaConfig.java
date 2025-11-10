@@ -3,6 +3,7 @@ package com.sim.app.sim_app.config.kafka;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.listener.DefaultErrorHandler;
+import org.springframework.kafka.listener.ListenerExecutionFailedException;
 import org.springframework.util.backoff.FixedBackOff;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
@@ -19,21 +20,23 @@ public class MyKafkaConfig {
         FixedBackOff fixedBackOff = new FixedBackOff(0L, 3);
 
         DefaultErrorHandler errorHandler = new DefaultErrorHandler((consumerRecord, exception) -> {
-            if (consumerRecord != null) {
-                log.error(
-                    "Failed to process record after 3 retries. Skipping record. Topic: {}, Offset: {}, Error: {}",
-                    consumerRecord.topic(),
-                    consumerRecord.offset(),
-                    exception.getMessage()
-                );
-            } else {
-                log.error("Kafka error occurred (no consumer record): {}", exception.getMessage());
+            try {
+                if (consumerRecord == null) {
+                    log.error("Kafka error occurred (no consumer record): {}", exception.getMessage(), exception);
+                } else {
+                    String topic = consumerRecord.topic();
+                    long offset = consumerRecord.offset();
+                    log.error("Failed to process record. Topic={}, Offset={}, Error={}", topic, offset, exception.getMessage(), exception);
+                }
+            } catch (Exception e) {
+                log.error("Unexpected error while handling Kafka exception: {}", e.getMessage(), e);
             }
         }, fixedBackOff);
 
         errorHandler.addNotRetryableExceptions(
             InvalidFormatException.class,
-            DeserializationException.class
+            DeserializationException.class,
+            ListenerExecutionFailedException.class
         );
 
         return errorHandler;

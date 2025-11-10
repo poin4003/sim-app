@@ -3,7 +3,6 @@ package com.sim.app.sim_app.features.sim.config;
 import com.sim.app.sim_app.features.sim.v1.dto.CreateSimRequest;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +11,6 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.DefaultErrorHandler;
-import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 @Configuration
 @EnableKafka
@@ -24,18 +22,10 @@ public class SimKafkaConfig {
 
     @Bean
     public ConsumerFactory<String, CreateSimRequest> simConsumerFactory() { 
-        Map<String, Object> configs = kafkaProperties.buildConsumerProperties(); 
-
-        if (configs == null) {
-            throw new NullPointerException("Kafka Consumer Properties Map cannot be null.");
-        }
-
-        return new DefaultKafkaConsumerFactory<>(
-            configs, 
-            new StringDeserializer(), 
-            new JsonDeserializer<>(CreateSimRequest.class)
-        );
-    } 
+        Map<String, Object> configs = kafkaProperties.buildConsumerProperties();
+        if (configs == null) throw new NullPointerException("Kafka Consumer Properties Map cannot be null.");
+        return new DefaultKafkaConsumerFactory<>(configs);
+    }
 
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, CreateSimRequest>
