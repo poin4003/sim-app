@@ -26,13 +26,11 @@ public class SimImportProducer {
 
         String simKey = request.getSimPhoneNumber() + "-" + UUID.randomUUID().toString();
 
-        final String typeIdHeaderValue = CreateSimRequest.class.getName();
-
         org.springframework.messaging.Message<CreateSimRequest> message = MessageBuilder
                                                                         .withPayload(request)
                                                                         .setHeader(KafkaHeaders.TOPIC, TOPIC_NAME)
                                                                         .setHeader(KafkaHeaders.KEY, simKey)
-                                                                        .setHeader("__TypeId__", typeIdHeaderValue)
+                                                                        .setHeader("__TypeId__", CreateSimRequest.class.getName())
                                                                         .build();
 
         kafkaTemplate.send(message);
