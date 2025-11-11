@@ -35,6 +35,11 @@ spring:
     flyway:
         enabled: false
 
+    servlet:
+        multipart:
+            max-file-size: 500MB
+            max-request-size: 500MB
+
     kafka:
         bootstrap-servers: localhost:9193
         consumer:
@@ -53,7 +58,7 @@ spring:
 
         producer:
             key-serializer: org.apache.kafka.common.serialization.StringSerializer
-            value-serializer: org.apache.kafka.common.serialization.StringSerializer
+            value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 # Swagger
 springdoc:

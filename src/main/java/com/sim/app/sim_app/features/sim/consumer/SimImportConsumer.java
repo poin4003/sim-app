@@ -23,12 +23,13 @@ public class SimImportConsumer {
         containerFactory = "simKafkaListenerContainerFactory"
     )
     public void ImportSingleSim(CreateSimRequest request) {
-        log.info("Received created Sim: {}", request);
 
         if (request == null) {
             log.error("Received null request due to deserialization error. Skipping");
             return;
         }
+
+        log.info("Received created Sim: {}", request);
 
         try {
             SimResponse response = simService.createSim(request);

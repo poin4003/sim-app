@@ -29,3 +29,5 @@ flyway_repair:
 	./mvnw.cmd flyway:repair "-Dflyway.url=$(DB_URL)" "-Dflyway.user=$(DB_USER)" "-Dflyway.password=$(DB_PASSWORD)"
 
 # docker compose -f docker-compose-broker-kafka.yaml --project-name kafka  up -d
+# docker exec kafka1 kafka-topics.sh --describe --topic import-sim-topic --bootstrap-server localhost:9092
+# docker exec kafka1 kafka-topics.sh --alter --topic import-sim-topic --partitions 1 --bootstrap-server localhost:9092

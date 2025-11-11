@@ -43,6 +43,8 @@ public class SimKafkaConfig {
         
         factory.setCommonErrorHandler(commonErrorHandler);
 
+        factory.setConcurrency(3);
+
         return factory;
     }
 }
