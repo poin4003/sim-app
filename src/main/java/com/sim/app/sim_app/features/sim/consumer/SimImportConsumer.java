@@ -3,8 +3,8 @@ package com.sim.app.sim_app.features.sim.consumer;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import com.sim.app.sim_app.features.sim.v1.dto.CreateSimRequest;
-import com.sim.app.sim_app.features.sim.v1.dto.SimResponse;
+import com.sim.app.sim_app.features.sim.v1.dto.request.CreateSimRequest;
+import com.sim.app.sim_app.features.sim.v1.dto.response.SimResponse;
 import com.sim.app.sim_app.features.sim.v1.service.SimService;
 
 import lombok.RequiredArgsConstructor;

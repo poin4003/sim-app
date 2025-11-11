@@ -1,4 +1,4 @@
-package com.sim.app.sim_app.features.sim.v1.dto;
+package com.sim.app.sim_app.features.sim.v1.dto.response;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

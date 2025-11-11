@@ -1,6 +1,5 @@
 package com.sim.app.sim_app.features.sim.config;
 
-import com.sim.app.sim_app.features.sim.v1.dto.CreateSimRequest;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
@@ -11,6 +10,8 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.DefaultErrorHandler;
+
+import com.sim.app.sim_app.features.sim.v1.dto.request.CreateSimRequest;
 
 @Configuration
 @EnableKafka

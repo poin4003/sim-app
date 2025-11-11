@@ -1,4 +1,4 @@
-package com.sim.app.sim_app.features.sim.v1.dto;
+package com.sim.app.sim_app.features.sim.v1.dto.request;
 
 import com.sim.app.sim_app.features.sim.enums.SimStatusEnum;
 
