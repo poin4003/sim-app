@@ -1,6 +1,8 @@
 package com.sim.app.sim_app.core.dto;
 
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import lombok.Data;
 
@@ -22,5 +24,17 @@ public class PaginationResponse<T> {
         response.setItems(items);
         response.setMetaData(meta);
         return response;
+    }
+
+    public <R> PaginationResponse<R> map(Function<T, R> converter) {
+        List<R> newItems = this.items.stream()
+                                    .map(converter)
+                                    .collect(Collectors.toList());
+
+        PaginationResponse<R> newResponse = new PaginationResponse<>();
+        newResponse.setItems(newItems);
+        newResponse.setMetaData(this.metaData);
+        
+        return newResponse;
     }
 }

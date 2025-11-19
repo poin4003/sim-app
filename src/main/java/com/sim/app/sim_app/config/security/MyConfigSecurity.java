@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.sim.app.sim_app.config.jwt.JwtAuthenticationFilter;
-import com.sim.app.sim_app.features.user.v1.service.impl.UserDetailServiceImpl;
+import com.sim.app.sim_app.features.user.api.v1.service.impl.UserDetailServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 

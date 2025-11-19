@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import com.sim.app.sim_app.features.sim.enums.SimStatusEnum;
+import com.sim.app.sim_app.features.sims.enums.SimStatusEnum;
 import com.sim.app.sim_app.handler.GenericEnumTypeHandler;
 import com.sim.app.sim_app.handler.UUIDTypeHandler;
 
