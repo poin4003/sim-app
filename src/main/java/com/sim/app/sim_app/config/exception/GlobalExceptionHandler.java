@@ -4,7 +4,7 @@ import com.sim.app.sim_app.core.exception.MyException;
 import com.sim.app.sim_app.core.response.ResultCode;
 import com.sim.app.sim_app.core.response.ResultUtil;
 import com.sim.app.sim_app.core.vo.ResultMessage;
-import com.sim.app.sim_app.utils.JsonUtil;
+import com.sim.app.sim_app.utils.JsonUtils;
 
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.ratelimiter.RequestNotPermitted;
@@ -67,7 +67,7 @@ public class GlobalExceptionHandler {
                 ? ex.getMostSpecificCause().getMessage()
                 : ex.getMessage();
 
-        String errorDetail = JsonUtil.simplifyJsonErrorMessage(rawMessage);
+        String errorDetail = JsonUtils.simplifyJsonErrorMessage(rawMessage);
 
         ResultMessage<?> errorMessage = ResultUtil.error(
                 ResultCode.PARAMS_ERROR,
