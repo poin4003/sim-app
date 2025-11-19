@@ -177,6 +177,14 @@
             <artifactId>easyexcel</artifactId>
             <version>3.3.4</version>
         </dependency>
+
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>1.15.0</version>
+            <scope>runtime</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
