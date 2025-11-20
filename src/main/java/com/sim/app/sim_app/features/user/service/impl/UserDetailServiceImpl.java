@@ -1,4 +1,4 @@
-package com.sim.app.sim_app.features.user.api.v1.service.impl;
+package com.sim.app.sim_app.features.user.service.impl;
 
 import java.util.List;
 
@@ -10,14 +10,14 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.sim.app.sim_app.features.user.entity.Role;
 import com.sim.app.sim_app.features.user.entity.User;
-import com.sim.app.sim_app.features.user.mapper.UserMapper;
+import com.sim.app.sim_app.features.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class UserDetailServiceImpl implements UserDetailsService {
-    private final UserMapper userMapper;
+    private final UserRepository userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
