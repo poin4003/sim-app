@@ -19,7 +19,7 @@ services:
     image: 'confluentinc/cp-kafka:7.5.0'
     container_name: kafka1
     ports:
-      - 9193:9094 # Port cho client bên ngoài (trên host)
+      - 9193:9094
     user: root
     environment:
       ### General configurations
