@@ -1,4 +1,4 @@
-package com.sim.app.sim_app.features.user.api.v1.controller;
+package com.sim.app.sim_app.features.rbac.api.v1.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.Authentication;
 
 import com.sim.app.sim_app.core.vo.ResultMessage;
-import com.sim.app.sim_app.features.user.entity.User;
+import com.sim.app.sim_app.features.user.entity.UserBaseEntity;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -27,8 +27,8 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "RBAC Management V1", description = "RBAC docs")
 public class RbacController extends BaseController {
     @GetMapping("/info") 
-    public ResponseEntity<ResultMessage<User>> getUserInfo(Authentication authentication) {
-        User principal = (User)authentication.getPrincipal();
+    public ResponseEntity<ResultMessage<UserBaseEntity>> getUserInfo(Authentication authentication) {
+        UserBaseEntity principal = (UserBaseEntity)authentication.getPrincipal();
         return OK(principal);
     }
 }

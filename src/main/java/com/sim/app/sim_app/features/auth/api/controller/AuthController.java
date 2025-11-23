@@ -1,4 +1,4 @@
-package com.sim.app.sim_app.features.user.api.v1.controller;
+package com.sim.app.sim_app.features.auth.api.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import com.sim.app.sim_app.config.jwt.JwtTokenProvider;
 import com.sim.app.sim_app.core.controller.BaseController;
 import com.sim.app.sim_app.core.vo.ResultMessage;
-import com.sim.app.sim_app.features.user.api.v1.dto.LoginRequest;
-import com.sim.app.sim_app.features.user.api.v1.dto.LoginResponse;
+import com.sim.app.sim_app.features.auth.api.dto.request.LoginRequest;
+import com.sim.app.sim_app.features.auth.api.dto.response.LoginResponse;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
