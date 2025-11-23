@@ -1,4 +1,4 @@
-package com.sim.app.sim_app.features.user.api.v1.dto;
+package com.sim.app.sim_app.features.auth.api.dto.request;
 
 import lombok.Data;
 

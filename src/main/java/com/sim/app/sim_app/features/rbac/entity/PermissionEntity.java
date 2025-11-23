@@ -1,4 +1,4 @@
-package com.sim.app.sim_app.features.user.entity;
+package com.sim.app.sim_app.features.rbac.entity;
 
 import java.util.UUID;
 
@@ -6,12 +6,15 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.sim.app.sim_app.base.BaseEntity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @TableName("permissions")
-public class Permission {
+public class PermissionEntity extends BaseEntity {
     @TableId(value = "permission_id", type = IdType.ASSIGN_UUID)
     private UUID permissionId;
 

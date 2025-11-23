@@ -1,5 +1,6 @@
 package com.sim.app.sim_app.features.user.entity;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -9,40 +10,57 @@ import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.sim.app.sim_app.features.rbac.entity.RoleEntity;
+import com.sim.app.sim_app.features.user.enums.UserStatusEnum;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-@TableName("users")
-public class User implements UserDetails {
+@EqualsAndHashCode(callSuper = true)
+@TableName("user_base")
+public class UserBaseEntity extends BaseUserDetailEntity {
 
     @TableId(value = "user_id", type = IdType.ASSIGN_UUID)
     private UUID userId;
 
-    @TableField(value = "email")
-    private String email;
+    @TableField(value = "user_email")
+    private String userEmail;
 
-    @TableField(value = "password")
-    private String password;
+    @TableField(value = "user_password")
+    private String userPassword;
 
-    @TableField(value = "status")
-    private String status;
+    @TableField(value = "user_status")
+    private UserStatusEnum userStatus;
+
+    @TableField(value = "user_salt")
+    private String userSalt;
+
+    @TableField(value = "user_login_time")
+    private LocalDateTime userLoginTime;
+
+    @TableField(value = "user_logout_time")
+    private LocalDateTime userLogoutIp;
+
+    @TableField(value = "user_login_ip")
+    private String userLoginIp;
 
     @TableField(value = "del_flag")
     private String delFlag;
 
     @TableField(exist = false)
-    private List<Role> roles;
+    private List<RoleEntity> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> authorities = new HashSet<>();
+
+        if (this.roles == null) return authorities;
 
         authorities.addAll(roles.stream()
            .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRoleKey()))
@@ -58,31 +76,21 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.password;
+        return this.userPassword;
     }
 
     @Override
     public String getUsername() {
-        return this.email;
+        return this.userEmail;
     }
 
     @Override
-    public boolean isAccountNonExpired() {
-        return true;    
+    public UserStatusEnum getUserStatus() {
+        return this.userStatus;
     }
 
     @Override
-    public boolean isAccountNonLocked() { 
-        return "0".equals(this.status);
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return "0".equals(this.delFlag);
+    public String getDelFlag() {
+        return this.delFlag;
     }
 }

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.sim.app.sim_app.features.sims.enums.SimStatusEnum;
+import com.sim.app.sim_app.features.user.enums.UserStatusEnum;
 import com.sim.app.sim_app.handler.GenericEnumTypeHandler;
 import com.sim.app.sim_app.handler.UUIDTypeHandler;
 
@@ -31,6 +32,7 @@ public class MyBatisPlusConfig {
         return configuration -> {
             configuration.getTypeHandlerRegistry().register(UUIDTypeHandler.class);
             configuration.getTypeHandlerRegistry().register(SimStatusEnum.class, JdbcType.INTEGER, new GenericEnumTypeHandler<>(SimStatusEnum.class));
+            configuration.getTypeHandlerRegistry().register(UserStatusEnum.class, new GenericEnumTypeHandler<>(UserStatusEnum.class));
         };
     }
 }
