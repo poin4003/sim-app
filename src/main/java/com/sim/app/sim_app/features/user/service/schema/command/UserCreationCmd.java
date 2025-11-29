@@ -1,4 +1,4 @@
-package com.sim.app.sim_app.features.user.service.schema.request;
+package com.sim.app.sim_app.features.user.service.schema.command;
 
 import java.util.List;
 
