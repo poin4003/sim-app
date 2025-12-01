@@ -38,9 +38,6 @@ public class UserBaseEntity extends BaseUserDetailEntity {
     @TableField(value = "user_status")
     private UserStatusEnum userStatus;
 
-    @TableField(value = "user_salt")
-    private String userSalt;
-
     @TableField(value = "user_login_time")
     private LocalDateTime userLoginTime;
 

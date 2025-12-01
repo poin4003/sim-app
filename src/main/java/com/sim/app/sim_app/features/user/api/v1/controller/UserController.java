@@ -1,5 +1,47 @@
 package com.sim.app.sim_app.features.user.api.v1.controller;
 
-public class UserController {
-    
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.sim.app.sim_app.core.controller.BaseController;
+import com.sim.app.sim_app.core.vo.ResultMessage;
+import com.sim.app.sim_app.features.user.api.v1.dto.UserMapStruct;
+import com.sim.app.sim_app.features.user.api.v1.dto.request.UserCreationRequest;
+import com.sim.app.sim_app.features.user.api.v1.dto.response.UserResponse;
+import com.sim.app.sim_app.features.user.service.UserService;
+import com.sim.app.sim_app.features.user.service.schema.command.UserCreationCmd;
+import com.sim.app.sim_app.features.user.service.schema.result.UserResult;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@RestController
+@Slf4j
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/user")
+@Tag(name = "USER Management V1", description = "User docs")
+public class UserController extends BaseController {
+
+    private final UserService userService;
+    private final UserMapStruct userMapStruct;
+
+    @PostMapping("/")
+    @PreAuthorize("hasRole('ADMIN_SYSTEM')")
+    @Operation(summary = "Create new user (Admin only)")
+    public ResponseEntity<ResultMessage<UserResponse>> createUser(
+        @Valid @RequestBody UserCreationRequest request
+    ) {
+        UserCreationCmd cmd = userMapStruct.toCommand(request);
+
+        UserResult result = userService.createUser(cmd);
+
+        return Created(userMapStruct.toResponse(result));
+    }
 }

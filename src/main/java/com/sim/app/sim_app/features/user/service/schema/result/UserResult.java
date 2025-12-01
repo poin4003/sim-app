@@ -1,7 +1,6 @@
 package com.sim.app.sim_app.features.user.service.schema.result;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 import com.sim.app.sim_app.features.user.enums.UserStatusEnum;
@@ -15,15 +14,11 @@ public class UserResult {
 
     private UUID userId;
 
-    private String email;
+    private String userEmail;
 
-    private String username;
-
-    private String phoneNumber;
-
-    private UserStatusEnum status;
-
-    private List<String> roles;
+    private UserStatusEnum userStatus;
 
     private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 }

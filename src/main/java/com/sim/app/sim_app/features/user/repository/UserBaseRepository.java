@@ -6,6 +6,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.sim.app.sim_app.features.user.entity.UserBaseEntity;
 
 @Mapper
-public interface UserRepository extends BaseMapper<UserBaseEntity> {
+public interface UserBaseRepository extends BaseMapper<UserBaseEntity> {
 
 }
