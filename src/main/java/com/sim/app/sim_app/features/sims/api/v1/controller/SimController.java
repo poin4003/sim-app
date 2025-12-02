@@ -1,7 +1,6 @@
 package com.sim.app.sim_app.features.sims.api.v1.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +14,7 @@ import com.sim.app.sim_app.features.sims.api.v1.dto.SimMapStruct;
 import com.sim.app.sim_app.features.sims.api.v1.dto.request.CreateSimRequest;
 import com.sim.app.sim_app.features.sims.api.v1.dto.response.SimResponse;
 import com.sim.app.sim_app.features.sims.service.SimService;
+import com.sim.app.sim_app.features.sims.service.schema.query.SimFilterQuery;
 import com.sim.app.sim_app.features.sims.service.schema.result.SimExcelExportResult;
 import com.sim.app.sim_app.features.sims.service.schema.result.SimResult;
 
@@ -36,6 +36,7 @@ import java.net.URLEncoder;
 import java.util.List;
 import java.util.UUID;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -88,10 +89,9 @@ public class SimController extends BaseController {
     @GetMapping("")
     @Operation(summary = "Get list of SIM", description = "Get list of SIM")
     public ResponseEntity<ResultMessage<PaginationResponse<SimResponse>>> getManySims(
-        @RequestParam(defaultValue = "1") long page,
-        @RequestParam(defaultValue = "10") long size
+        @ParameterObject SimFilterQuery query
     ) {
-        PaginationResponse<SimResponse> response = simService.getManySim(page, size)
+        PaginationResponse<SimResponse> response = simService.getManySim(query)
                                                             .map(simMapStruct::toResponse);
 
         return OK("Get many sim success", response);

@@ -1,12 +1,17 @@
 package com.sim.app.sim_app.features.user.service.impl;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.sim.app.sim_app.core.dto.PaginationResponse;
 import com.sim.app.sim_app.core.exception.ExceptionFactory;
 import com.sim.app.sim_app.features.user.entity.UserBaseEntity;
 import com.sim.app.sim_app.features.user.enums.UserStatusEnum;
@@ -14,6 +19,7 @@ import com.sim.app.sim_app.features.user.repository.UserBaseRepository;
 import com.sim.app.sim_app.features.user.service.UserService;
 import com.sim.app.sim_app.features.user.service.schema.UserCoreMapStruct;
 import com.sim.app.sim_app.features.user.service.schema.command.UserCreationCmd;
+import com.sim.app.sim_app.features.user.service.schema.query.UserQuery;
 import com.sim.app.sim_app.features.user.service.schema.result.UserResult;
 
 import lombok.RequiredArgsConstructor;
@@ -52,5 +58,23 @@ public class UserServiceImpl implements UserService {
         userBaseRepository.insert(userBase);
 
         return userCoreMapStruct.toUserResult(userBase);
+    }
+
+    @Override 
+    public PaginationResponse<UserResult> getManyUsers(UserQuery queryInput) {
+        IPage<UserBaseEntity> pageObject = new Page<>(queryInput.getCurrentPage(), queryInput.getPageSize());
+
+        IPage<UserBaseEntity> entityPage = userBaseRepository.selectPage(pageObject, null);
+
+        List<UserResult> responseList = entityPage.getRecords().stream()
+                    .map(userCoreMapStruct::toUserResult)
+                    .collect(Collectors.toList());
+        
+        return PaginationResponse.of(
+            responseList,
+            entityPage.getTotal(),
+            entityPage.getCurrent(),
+            entityPage.getSize()
+        );
     }
 }

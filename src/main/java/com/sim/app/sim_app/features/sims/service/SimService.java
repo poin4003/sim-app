@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.sim.app.sim_app.core.dto.PaginationResponse;
 import com.sim.app.sim_app.features.sims.service.schema.command.SimCmd;
+import com.sim.app.sim_app.features.sims.service.schema.query.SimFilterQuery;
 import com.sim.app.sim_app.features.sims.service.schema.result.SimExcelExportResult;
 import com.sim.app.sim_app.features.sims.service.schema.result.SimResult;
 
@@ -17,7 +18,7 @@ public interface SimService {
 
     SimResult getSimById(UUID id);
 
-    PaginationResponse<SimResult> getManySim(long page, long size);
+    PaginationResponse<SimResult> getManySim(SimFilterQuery queryInput);
 
     List<SimExcelExportResult> getAllSimExcelExport();
 

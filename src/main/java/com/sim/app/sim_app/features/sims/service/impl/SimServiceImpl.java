@@ -23,6 +23,7 @@ import com.sim.app.sim_app.features.sims.service.SimService;
 import com.sim.app.sim_app.features.sims.service.schema.SimCoreMapStruct;
 import com.sim.app.sim_app.features.sims.service.schema.command.SimCmd;
 import com.sim.app.sim_app.features.sims.service.schema.command.SimExcelImportCmd;
+import com.sim.app.sim_app.features.sims.service.schema.query.SimFilterQuery;
 import com.sim.app.sim_app.features.sims.service.schema.result.SimExcelExportResult;
 import com.sim.app.sim_app.features.sims.service.schema.result.SimResult;
 import com.sim.app.sim_app.utils.TaskRunnerUtils;
@@ -89,8 +90,8 @@ public class SimServiceImpl implements SimService{
     }
 
     @Override
-    public PaginationResponse<SimResult> getManySim(long page, long size) {
-        IPage<SimEntity> pageObject = new Page<>(page, size);
+    public PaginationResponse<SimResult> getManySim(SimFilterQuery queryInput) {
+        IPage<SimEntity> pageObject = new Page<>(queryInput.getCurrentPage(), queryInput.getPageSize());
 
         IPage<SimEntity> entityPage = simRepo.selectPage(pageObject, null);
 
