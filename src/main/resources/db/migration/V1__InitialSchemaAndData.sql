@@ -116,7 +116,7 @@ CREATE TABLE key_store (
     user_id UUID UNIQUE NOT NULL,
     public_key TEXT NOT NULL,
     private_key TEXT NOT NULL,
-    refresh_token VARCHAR(255) UNIQUE,
+    refresh_token TEXT UNIQUE,
 
     -- BaseEntity columns
     note TEXT,
@@ -132,7 +132,7 @@ CREATE TABLE consumed_refresh_tokens (
     token_history_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     key_store_id UUID,
     user_id UUID NOT NULL,
-    token_value VARCHAR(255) UNIQUE NOT NULL,
+    token_value TEXT UNIQUE NOT NULL,
     expiry_date TIMESTAMP WITH TIME ZONE NOT NULL,
     used_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     
