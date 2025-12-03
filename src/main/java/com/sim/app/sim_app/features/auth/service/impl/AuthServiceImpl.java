@@ -9,7 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.sim.app.sim_app.config.jwt.JwtTokenProvider;
 import com.sim.app.sim_app.config.jwt.dto.JwtPayload;
 import com.sim.app.sim_app.config.jwt.dto.KeyPairDto;
@@ -68,28 +67,15 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private void saveOrUpdateKeyStore(UUID userId, String publicKey, String privateKey, String refreshToken) {
-        LambdaQueryWrapper<KeyStoreEntity> query = new LambdaQueryWrapper<>();
-        query.eq(KeyStoreEntity::getUserId, userId);
-
-        boolean isNew = false;
-
-        KeyStoreEntity keyStore = keyStoreRepository.selectOne(query);
-        if (keyStore == null) {
-            isNew = true;
-            keyStore = new KeyStoreEntity();
-            keyStore.setKeyStoreId(UUID.randomUUID());
-            keyStore.setUserId(userId);
-        }
-
+        KeyStoreEntity keyStore = new KeyStoreEntity();
+        
+        keyStore.setKeyStoreId(UUID.randomUUID());
+        keyStore.setUserId(userId);
         keyStore.setPublicKey(publicKey);
         keyStore.setPrivateKey(privateKey);
         keyStore.setRefreshToken(refreshToken);
 
-        if (isNew) {
-            keyStoreRepository.insert(keyStore);
-        } else {
-            keyStoreRepository.updateById(keyStore);
-        }
+        keyStoreRepository.upsert(keyStore); 
     }
 
     private void updateUserLoginInfo(UUID userId, String ipAddress) {

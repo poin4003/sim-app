@@ -7,5 +7,5 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface KeyStoreRepository extends BaseMapper<KeyStoreEntity> {
-    
+    void upsert(KeyStoreEntity entity);
 }
