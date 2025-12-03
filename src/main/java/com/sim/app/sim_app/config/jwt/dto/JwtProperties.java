@@ -1,4 +1,4 @@
-package com.sim.app.sim_app.config.jwt;
+package com.sim.app.sim_app.config.jwt.dto;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

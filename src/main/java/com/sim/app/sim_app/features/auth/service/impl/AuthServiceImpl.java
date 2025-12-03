@@ -11,7 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.sim.app.sim_app.config.jwt.JwtTokenProvider;
-import com.sim.app.sim_app.config.jwt.KeyPairDto;
+import com.sim.app.sim_app.config.jwt.dto.JwtPayload;
+import com.sim.app.sim_app.config.jwt.dto.KeyPairDto;
 import com.sim.app.sim_app.features.auth.entity.KeyStoreEntity;
 import com.sim.app.sim_app.features.auth.repository.KeyStoreRepository;
 import com.sim.app.sim_app.features.auth.service.AuthService;
@@ -48,7 +49,11 @@ public class AuthServiceImpl implements AuthService {
         String privateKey = keyPair.getPrivateKey();
         String publicKey = keyPair.getPublicKey();
 
-        String accessToken = jwtTokenProvider.generateAccessToken(userId, userEmail, privateKey);
+        JwtPayload payload = JwtPayload.builder()
+            .userEmail(userEmail)
+            .build();
+
+        String accessToken = jwtTokenProvider.generateAccessToken(userId, payload, privateKey);
         String refreshToken = jwtTokenProvider.generateRefreshToken(userId, privateKey);
 
         saveOrUpdateKeyStore(userId, publicKey, privateKey, refreshToken);

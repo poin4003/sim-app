@@ -13,9 +13,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sim.app.sim_app.config.jwt.dto.JwtPayload;
 import com.sim.app.sim_app.features.auth.entity.KeyStoreEntity;
 import com.sim.app.sim_app.features.auth.repository.KeyStoreRepository;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final ObjectMapper objectMapper;
     private final UserDetailsService userDetailsService;
     private final KeyStoreRepository keyStoreRepository;
 
@@ -49,10 +53,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             .eq(KeyStoreEntity::getUserId, userId)
                     );
 
-                    if (keyStore != null && jwtTokenProvider.validateToken(token, keyStore.getPublicKey())) {
-                        String email = jwtTokenProvider.getEmailFromToken(token, keyStore.getPublicKey());
+                    if (keyStore != null)  {
+                        Claims claims = jwtTokenProvider.getAllClaimsFromToken(token, keyStore.getPublicKey());
 
-                        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+                        JwtPayload payload = objectMapper.convertValue(claims, JwtPayload.class);
+
+                        UserDetails userDetails = userDetailsService.loadUserByUsername(payload.getUserEmail());
 
                         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities()

@@ -7,9 +7,13 @@ import java.util.UUID;
 import org.mapstruct.Named;
 import org.springframework.stereotype.Component;
 
+import lombok.RequiredArgsConstructor;
+
 @Component
+@RequiredArgsConstructor
 public class GlobalMapperConfig {
-     @Named("uuidToString")
+
+    @Named("uuidToString")
     public String uuidToString(UUID uuid) {
         return uuid != null ? uuid.toString() : null;
     }
