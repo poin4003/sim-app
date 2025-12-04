@@ -1,11 +1,15 @@
 package com.sim.app.sim_app.features.sims.service.schema.query;
 
+import com.sim.app.sim_app.base.BaseQuery;
+
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @Builder
-public class SimFilterQuery {
+@EqualsAndHashCode(callSuper = true)
+public class SimFilterQuery extends BaseQuery {
     private String phoneNumber;
     
     private Integer status;
@@ -13,10 +17,4 @@ public class SimFilterQuery {
     private Long fromDate;
     
     private Long toDate;
-
-    @Builder.Default
-    private int page = 1;
-
-    @Builder.Default
-    private int size = 20;
 }

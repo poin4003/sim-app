@@ -53,7 +53,6 @@ CREATE TABLE user_base (
     user_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_email VARCHAR(30) UNIQUE NOT NULL,
     user_password VARCHAR(255) DEFAULT NULL, 
-    user_salt VARCHAR(255) NOT NULL,
     
     user_status INT NOT NULL DEFAULT 1, 
     del_flag CHAR(1) DEFAULT '0', 
@@ -117,7 +116,7 @@ CREATE TABLE key_store (
     user_id UUID UNIQUE NOT NULL,
     public_key TEXT NOT NULL,
     private_key TEXT NOT NULL,
-    refresh_token VARCHAR(255) UNIQUE,
+    refresh_token TEXT UNIQUE,
 
     -- BaseEntity columns
     note TEXT,
@@ -133,7 +132,7 @@ CREATE TABLE consumed_refresh_tokens (
     token_history_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     key_store_id UUID,
     user_id UUID NOT NULL,
-    token_value VARCHAR(255) UNIQUE NOT NULL,
+    token_value TEXT UNIQUE NOT NULL,
     expiry_date TIMESTAMP WITH TIME ZONE NOT NULL,
     used_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     
@@ -218,9 +217,9 @@ BEGIN
 
     -- 3. USERS
     -- user_status = 1 (ACTIVE)
-    INSERT INTO user_base (user_id, user_email, user_password, user_salt, user_status, del_flag, description) VALUES 
-        (ADMIN_SYS_UID, 'system@admin.com', '$2b$10$aFCsDS3JNrk3lR/mopRPROvACMVX4rj8v0QTpalcFbuUc9YuYqwFu', 'ADMIN_SALT_EXAMPLE', 1, '0', 'Tài khoản Super Admin'),
-        (SELLER_UID, 'shop@partner.com', '$2b$10$aFCsDS3JNrk3lR/mopRPROvACMVX4rj8v0QTpalcFbuUc9YuYqwFu', 'SELLER_SALT_EXAMPLE', 1, '0', 'Tài khoản Shop mẫu');
+    INSERT INTO user_base (user_id, user_email, user_password, user_status, del_flag, description) VALUES 
+        (ADMIN_SYS_UID, 'system@admin.com', '$2b$10$aFCsDS3JNrk3lR/mopRPROvACMVX4rj8v0QTpalcFbuUc9YuYqwFu', 1, '0', 'Tài khoản Super Admin'),
+        (SELLER_UID, 'shop@partner.com', '$2b$10$aFCsDS3JNrk3lR/mopRPROvACMVX4rj8v0QTpalcFbuUc9YuYqwFu', 1, '0', 'Tài khoản Shop mẫu');
 
     -- 4. USER INFO
     INSERT INTO user_info (user_id, username, description) VALUES

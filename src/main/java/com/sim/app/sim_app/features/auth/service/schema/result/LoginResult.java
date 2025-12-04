@@ -1,4 +1,4 @@
-package com.sim.app.sim_app.features.auth.api.dto.response;
+package com.sim.app.sim_app.features.auth.service.schema.result;
 
 import java.util.UUID;
 
@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class LoginResponse {
+public class LoginResult {
 
     private String accessToken;
 
