@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.sim.app.sim_app.features.auth.service.schema.AuthCoreMapStruct;
 import com.sim.app.sim_app.features.rbac.entity.RoleEntity;
 import com.sim.app.sim_app.features.rbac.repository.RoleRepository;
 import com.sim.app.sim_app.features.user.entity.UserBaseEntity;
@@ -19,8 +20,10 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class UserDetailServiceImpl implements UserDetailsService {
-    private final UserBaseRepository userBaseRepo;
+
+    private final UserBaseRepository userBaseRepo; 
     private final RoleRepository roleRepo;
+    private final AuthCoreMapStruct authCoreMapStruct;
 
     @Override
     @Transactional(readOnly = true)
@@ -38,6 +41,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
        
         user.setRoles(roles);
 
-        return user;
+        return authCoreMapStruct.toUserPrincipal(user);
     }
 }

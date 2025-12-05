@@ -32,5 +32,5 @@ public class ConsumedRefreshTokenEntity extends BaseEntity {
     private Instant expiryDate;
 
     @TableField(value = "used_at")
-    private Instant usedAt = Instant.now();
+    private Instant usedAt;
 }

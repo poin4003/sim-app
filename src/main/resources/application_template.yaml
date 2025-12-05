@@ -16,6 +16,8 @@ app:
     jwt:
         access-token-expiration-ms: 3600000   # 1 hour
         refresh-token-expiration-ms: 604800000 # 7 days
+    security:
+        algo: HMAC
 
 # Spring config
 spring:

@@ -42,7 +42,7 @@ public class UserBaseEntity extends BaseUserDetailEntity {
     private LocalDateTime userLoginTime;
 
     @TableField(value = "user_logout_time")
-    private LocalDateTime userLogoutIp;
+    private LocalDateTime userLogoutTime;
 
     @TableField(value = "user_login_ip")
     private String userLoginIp;

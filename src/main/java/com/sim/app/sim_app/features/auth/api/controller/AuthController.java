@@ -1,20 +1,27 @@
 package com.sim.app.sim_app.features.auth.api.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import com.sim.app.sim_app.core.annotation.ClientIp;
 import com.sim.app.sim_app.core.controller.BaseController;
 import com.sim.app.sim_app.core.vo.ResultMessage;
+import com.sim.app.sim_app.features.auth.api.dto.AuthMapStruct;
 import com.sim.app.sim_app.features.auth.api.dto.request.LoginRequest;
+import com.sim.app.sim_app.features.auth.api.dto.request.RefreshTokenRequest;
 import com.sim.app.sim_app.features.auth.api.dto.response.LoginResponse;
 import com.sim.app.sim_app.features.auth.service.AuthService;
 import com.sim.app.sim_app.features.auth.service.schema.command.LoginCmd;
 import com.sim.app.sim_app.features.auth.service.schema.result.LoginResult;
+import com.sim.app.sim_app.features.auth.service.schema.result.UserPrincipal;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @Slf4j
@@ -24,14 +31,13 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthController extends BaseController {
 
     private final AuthService authService;
+    private final AuthMapStruct authMapStruct;
 
     @PostMapping("/login")
     public ResponseEntity<ResultMessage<LoginResponse>> login(
         @RequestBody LoginRequest request,
-        HttpServletRequest servletRequest
+        @ClientIp String ipAddress
     ) {
-        String ipAddress = getClientIp(servletRequest);
-
         LoginCmd cmd = LoginCmd.builder()
                             .userEmail(request.getUserEmail())
                             .userPassword(request.getUserPassword())
@@ -40,23 +46,26 @@ public class AuthController extends BaseController {
 
         LoginResult result = authService.login(cmd);
 
-        return OK("Login success", LoginResponse.builder()
-                                                    .accessToken(result.getAccessToken())                                 
-                                                    .refreshToken(result.getRefreshToken())
-                                                    .userEmail(result.getUserEmail())
-                                                    .userId(result.getUserId())
-                                                    .build()); 
+        return OK("Login success", authMapStruct.toLoginResponse(result)); 
     }
 
-    private String getClientIp(HttpServletRequest request) {
-        if (request == null) return "UNKNOWN";
-        String remoteAddr = request.getHeader("X-FORWARDED-FOR");
-        if (remoteAddr == null || "".equals(remoteAddr)) {
-            remoteAddr = request.getRemoteAddr();
+    @PostMapping("/refresh")
+    public ResponseEntity<ResultMessage<LoginResponse>> refreshToken(
+        @RequestBody RefreshTokenRequest request
+    ) {
+        LoginResult result = authService.refreshToken(request.getRefreshToken());
+
+        return OK("Refresh token success", authMapStruct.toLoginResponse(result));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<ResultMessage<Void>> logout(@AuthenticationPrincipal UserPrincipal currentUser) {
+        if (currentUser != null && currentUser.getKeyStore() != null)  {
+            authService.logout(
+                currentUser.getKeyStore().getKeyStoreId(),
+                currentUser.getUserId()
+            );
         }
-        if (remoteAddr != null && remoteAddr.contains(",")) {
-            return remoteAddr.split(",")[0].trim();
-        }
-        return remoteAddr;
+        return OK("Logout success", null);
     }
 }

@@ -1,4 +1,4 @@
-package com.sim.app.sim_app.config.jwt.dto;
+package com.sim.app.sim_app.config.security.crypto.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
