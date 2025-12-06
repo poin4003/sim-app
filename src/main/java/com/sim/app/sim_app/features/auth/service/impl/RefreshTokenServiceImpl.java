@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.sim.app.sim_app.features.auth.entity.ConsumedRefreshTokenEntity;
 import com.sim.app.sim_app.features.auth.repository.ConsumedRefreshTokenRepository;
 import com.sim.app.sim_app.features.auth.service.RefreshTokenService;
+import com.sim.app.sim_app.features.ops.service.CronJobService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,14 +22,28 @@ import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 public class RefreshTokenServiceImpl implements RefreshTokenService {
     
     private final ConsumedRefreshTokenRepository consumedRefreshTokenRepository;
+    private final CronJobService cronJobService;
 
-    @Scheduled(cron = "0 0 0/6 * * ?")
+    private static final String JOB_NAME_AUTH_CLEANUP = "AuthCleanupExpiredConsumedTokens";
+
+    // @Scheduled(cron = "0 0 0/6 * * ?")
+    @Scheduled(cron = "0/10 * * * * *") 
     @SchedulerLock(
-        name = "AuthCleanupExpiredConsumedTokens",
+        name = JOB_NAME_AUTH_CLEANUP,
         lockAtLeastFor = "PT5M",
         lockAtMostFor = "PT30M"
     )
     @Transactional
+    public void cleanupExpiredConsumedTokenJob() {
+        if (!cronJobService.isJobEnabled(JOB_NAME_AUTH_CLEANUP)) {
+            log.warn("[OPS] Cronjob '{}' is manually DISABLED via Redis. Skipping...", JOB_NAME_AUTH_CLEANUP);
+            return;
+        }
+
+        this.cleanupExpiredConsumedTokens();
+    }
+
+    @Override
     public void cleanupExpiredConsumedTokens() {
         log.info("Starting cleanup of expired consumed refresh token...");
 

@@ -1,4 +1,4 @@
-package com.sim.app.sim_app.features.ops.entitty;
+package com.sim.app.sim_app.features.ops.entity;
 
 import java.util.UUID;
 

@@ -4,7 +4,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import com.sim.app.sim_app.core.annotation.ClientIp;
 import com.sim.app.sim_app.core.controller.BaseController;
 import com.sim.app.sim_app.core.vo.ResultMessage;
 import com.sim.app.sim_app.features.auth.api.dto.AuthMapStruct;
@@ -35,9 +34,11 @@ public class AuthController extends BaseController {
 
     @PostMapping("/login")
     public ResponseEntity<ResultMessage<LoginResponse>> login(
-        @RequestBody LoginRequest request,
-        @ClientIp String ipAddress
+        @RequestBody LoginRequest request
+        // @ClientIp String ipAddress
     ) {
+        String ipAddress = "192.168.1.100";
+
         LoginCmd cmd = LoginCmd.builder()
                             .userEmail(request.getUserEmail())
                             .userPassword(request.getUserPassword())
